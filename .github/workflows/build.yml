@@ -1,0 +1,26 @@
+name: Produce Build
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Create build output
+        run: |-
+          set -euo pipefail
+          mkdir -p dist
+          echo "build from tf-ci-tests: ${{ github.sha }}" > dist/build.txt
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: build
+          path: dist/
+          retention-days: 7
